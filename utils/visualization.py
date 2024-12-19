@@ -2,6 +2,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import math
+from datetime import datetime
+import os
 
 def create_charts(df):
     job_counts = df['category'].value_counts().reset_index()
@@ -225,6 +227,7 @@ def create_grouped_charts_in_batches(df, group_by, analysis_columns, max_skills=
     Returns:
     None
     """
+
     unique_groups = df[group_by].dropna().unique()
     total_groups = len(unique_groups)
     num_batches = math.ceil(total_groups / max_rows)
@@ -294,6 +297,8 @@ def create_grouped_charts_in_batches(df, group_by, analysis_columns, max_skills=
                 # Update to the next column
                 col_idx += 1
 
+
+
         # Update layout and show the batch figure
         fig.update_layout(
             height=450 * n_rows, width=510 * n_cols,
@@ -301,4 +306,9 @@ def create_grouped_charts_in_batches(df, group_by, analysis_columns, max_skills=
             showlegend=False
         )
         fig.show()
+
+        # Save the figure to an HTML file
+        output_file = os.path.join('charts', f"{datetime.now().strftime('%y%m%d-%H%M')}_{group_by}_batch_{batch_idx + 1}.html")
+        fig.write_html(output_file)
+        print(f"Saved batch {batch_idx + 1} to {output_file}")
 
