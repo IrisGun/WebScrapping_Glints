@@ -1,6 +1,7 @@
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import math
 
 def create_charts(df):
     job_counts = df['category'].value_counts().reset_index()
@@ -10,20 +11,24 @@ def create_charts(df):
                             title='Job count by position',
                             labels={'category': 'Category of job position', 'count': 'Number of job post'},
                             color='category')
-    fig_job_counts.update_layout(xaxis_tickangle=-45)
+    fig_job_counts.update_layout(xaxis_tickangle=-45,height=600, width=1200)
+
 
     # Salary distribution by category
     fig_salary_distribution = px.box(df, x='category', y='standardize_salary_VND', 
                                     title='Salary distribution by category',
                                     labels={'category': 'Category of job position', 'standardize_salary_VND': 'Salary in VND'},
                                     color='category')
+    fig_salary_distribution.update_layout(height=600, width=1200)
 
     # Experience requirement
     experience_counts = df['experience'].value_counts().reset_index()
     experience_counts.columns = ['experience', 'count']
-    fig_experience_counts = px.pie(experience_counts, values='count', names='experience', 
+    fig_experience_counts = px.bar(experience_counts, x='count', y='experience', 
                                 title='Experience Requirement',
-                                hole=0.3)
+                                labels={'experience': 'Experience', 'count': 'Number of job post'},
+                                color='experience')
+    fig_experience_counts.update_layout(height=600, width=1200)
 
     # Location distribution
     location_counts = df['job_location'].value_counts().reset_index()
@@ -32,7 +37,7 @@ def create_charts(df):
                                 title='Job distribution by location',
                                 labels={'location': 'Location', 'count': 'Number of job post'},
                                 color='location')
-    fig_location_counts.update_layout(xaxis_tickangle=-45)
+    fig_location_counts.update_layout(xaxis_tickangle=-45,height=600, width=1200)
 
     # Required skills
     skills = df['requirement'].dropna().str.split(',').explode().str.strip()
@@ -42,7 +47,7 @@ def create_charts(df):
                             title='Top 20 most required skills',
                             labels={'skill': 'Skill', 'count': 'Count'},
                             color='skill')
-    fig_skill_counts.update_layout(xaxis_tickangle=-45)
+    fig_skill_counts.update_layout(xaxis_tickangle=-45,height=600, width=1200)
 
     # Show all charts
     fig_job_counts.show()
@@ -103,8 +108,9 @@ def create_comparative_charts(df, group_by_columns=['experience', 'job_location'
         # Experience distribution
         experience_counts = df['experience'].value_counts().reset_index()
         experience_counts.columns = ['experience', 'count']
-        fig_experience = px.pie(experience_counts, values='count', names='experience', 
-                                hole=0.3)
+        fig_experience = px.bar(experience_counts, y='count', x='experience', 
+                                color='experience',
+                                labels={'experience': 'Experience Level', 'count': 'Count'})
         for trace in fig_experience.data:
             fig.add_trace(trace, row=3, col=col_idx)
 
@@ -120,9 +126,179 @@ def create_comparative_charts(df, group_by_columns=['experience', 'job_location'
 
     # Update layout
     fig.update_layout(
-        height=1200, width=300 * n_cols,
+        height=1200, width=600 * n_cols,
         title_text="Job Analysis by Various Groups",
         showlegend=False,
     )
 
     fig.show()
+
+
+
+def create_grouped_charts(df, group_by, analysis_columns, max_skills=20):
+    """
+    Creates grouped charts for each unique value of a column (e.g., location or experience).
+
+    Args:
+    df (DataFrame): The job data.
+    group_by (str): The column to group by (e.g., "location", "experience").
+    analysis_columns (list): Columns to analyze within each group (e.g., "salary", "skill").
+    max_skills (int): Maximum number of top skills to display.
+
+    Returns:
+    None
+    """
+    unique_groups = df[group_by].dropna().unique()
+    n_rows = len(unique_groups)
+    n_cols = len(analysis_columns)
+
+    # Initialize subplots layout
+    fig = make_subplots(
+        rows=n_rows, cols=n_cols,
+        subplot_titles=[
+            f"{col} for {group_by}: {group}" 
+            for group in unique_groups for col in analysis_columns
+        ],
+        horizontal_spacing=0.1, vertical_spacing=0.15
+    )
+
+    # Iterate over each unique group
+    for row_idx, group in enumerate(unique_groups):
+        filtered_df = df[df[group_by] == group]
+        col_idx = 1  # Reset column index for each group
+
+        for analysis_col in analysis_columns:
+            if analysis_col == "standardize_salary_VND":
+                # Salary distribution
+                salary_fig = px.box(filtered_df, y=analysis_col, 
+                                    title=f"Salary for {group}",
+                                    labels={analysis_col: "Salary in VND"})
+                for trace in salary_fig.data:
+                    fig.add_trace(trace, row=row_idx + 1, col=col_idx)
+
+            elif analysis_col == "requirement":
+                # Skill distribution
+                skills = filtered_df[analysis_col].dropna().str.split(',').explode().str.strip()
+                skill_counts = skills.value_counts().head(max_skills).reset_index()
+                skill_counts.columns = ['skill', 'count']
+                skill_fig = px.bar(skill_counts, x='skill', y='count', 
+                                   title=f"Skills for {group}",
+                                   labels={'skill': 'Skill', 'count': 'Count'})
+                for trace in skill_fig.data:
+                    fig.add_trace(trace, row=row_idx + 1, col=col_idx)
+
+            elif analysis_col == "experience":
+                # Experience distribution
+                exp_counts = filtered_df[analysis_col].value_counts().reset_index()
+                exp_counts.columns = ['experience', 'count']
+                exp_fig = px.bar(exp_counts, x='experience', y='count', 
+                                 title=f"Experience for {group}",
+                                 labels={'experience': 'Experience', 'count': 'Count'})
+                for trace in exp_fig.data:
+                    fig.add_trace(trace, row=row_idx + 1, col=col_idx)
+
+            # Update to the next column
+            col_idx += 1
+
+    # Update layout
+    fig.update_layout(
+        height=300 * n_rows, width=300 * n_cols,
+        title_text=f"Analysis by {group_by}",
+        showlegend=False
+    )
+    fig.show()
+
+
+
+
+def create_grouped_charts_in_batches(df, group_by, analysis_columns, max_skills=20, max_rows=5):
+    """
+    Creates grouped charts for each unique value of a column in batches to avoid vertical spacing issues.
+
+    Args:
+    df (DataFrame): The job data.
+    group_by (str): The column to group by (e.g., "location", "experience").
+    analysis_columns (list): Columns to analyze within each group (e.g., "salary", "skill").
+    max_skills (int): Maximum number of top skills to display.
+    max_rows (int): Maximum rows (unique group values) per batch.
+
+    Returns:
+    None
+    """
+    unique_groups = df[group_by].dropna().unique()
+    total_groups = len(unique_groups)
+    num_batches = math.ceil(total_groups / max_rows)
+
+    for batch_idx in range(num_batches):
+        start_idx = batch_idx * max_rows
+        end_idx = min(start_idx + max_rows, total_groups)
+        groups_in_batch = unique_groups[start_idx:end_idx]
+        n_rows = len(groups_in_batch)
+        n_cols = len(analysis_columns)
+
+        # Initialize subplots layout for the current batch
+        fig = make_subplots(
+            rows=n_rows, cols=n_cols,
+            subplot_titles=[
+                f"{col} for {group_by}: {group}" 
+                for group in groups_in_batch for col in analysis_columns
+            ],
+            horizontal_spacing=0.1, vertical_spacing=0.15
+        )
+
+        # Iterate over each group in the batch
+        for row_idx, group in enumerate(groups_in_batch):
+            filtered_df = df[df[group_by] == group]
+            col_idx = 1  # Reset column index for each group
+
+            for analysis_col in analysis_columns:
+                if analysis_col == "standardize_salary_VND":
+                    # Salary distribution
+                    salary_fig = px.box(filtered_df, y=analysis_col, 
+                                        title=f"Salary for {group}",
+                                        labels={analysis_col: "Salary in VND"})
+                    for trace in salary_fig.data:
+                        fig.add_trace(trace, row=row_idx + 1, col=col_idx)
+
+                elif analysis_col == "requirement":
+                    # Skill distribution
+                    skills = filtered_df[analysis_col].dropna().str.split(',').explode().str.strip()
+                    skill_counts = skills.value_counts().head(max_skills).reset_index()
+                    skill_counts.columns = ['skill', 'count']
+                    skill_fig = px.bar(skill_counts, x='skill', y='count', 
+                                       title=f"Skills for {group}",
+                                       labels={'skill': 'Skill', 'count': 'Count'})
+                    for trace in skill_fig.data:
+                        fig.add_trace(trace, row=row_idx + 1, col=col_idx)
+
+                elif analysis_col == "experience":
+                    # Experience distribution
+                    exp_counts = filtered_df[analysis_col].value_counts().reset_index()
+                    exp_counts.columns = ['experience', 'count']
+                    exp_fig = px.bar(exp_counts, x='experience', y='count', 
+                                     title=f"Experience for {group}",
+                                     labels={'experience': 'Experience', 'count': 'Count'})
+                    for trace in exp_fig.data:
+                        fig.add_trace(trace, row=row_idx + 1, col=col_idx)
+
+                elif analysis_col == "job_location":
+                    # Location distribution
+                    location_counts = filtered_df[analysis_col].value_counts().reset_index()
+                    location_counts.columns = ['job_location', 'count']
+                    location_fig = px.bar(location_counts, x='job_location', y='count', 
+                                     title=f"Location for {group}",
+                                     labels={'job_location': 'Location', 'count': 'Count'})
+                    for trace in location_fig.data:
+                        fig.add_trace(trace, row=row_idx + 1, col=col_idx)
+
+                # Update to the next column
+                col_idx += 1
+
+        # Update layout and show the batch figure
+        fig.update_layout(
+            height=450 * n_rows, width=510 * n_cols,
+            title_text=f"Analysis by {group_by} (Batch {batch_idx + 1})",
+            showlegend=False
+        )
+        fig.show()
+
