@@ -1,9 +1,11 @@
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import plotly.io as pio
 import math
 from datetime import datetime
 import os
+
 
 def create_charts(df):
     job_counts = df['category'].value_counts().reset_index()
@@ -51,6 +53,12 @@ def create_charts(df):
                             color='skill')
     fig_skill_counts.update_layout(xaxis_tickangle=-45,height=600, width=1200)
 
+    try:
+        os.mkdir('charts/univariate')
+    except:
+        pass
+
+    timestamp = datetime.now().strftime("%y%m%d%H%m")
     # Show all charts
     fig_job_counts.show()
     fig_salary_distribution.show()
@@ -58,7 +66,17 @@ def create_charts(df):
     fig_location_counts.show()
     fig_skill_counts.show()
 
-    return None
+    list_fig = [fig_job_counts,fig_salary_distribution, fig_experience_counts, fig_location_counts, fig_skill_counts]
+    list_fig_name = ['job_counts', 'salary_distribution', 'experience_counts', 'location_counts', 'skill_counts']
+    
+    for fig, name in zip(list_fig, list_fig_name):
+        try:
+            pio.write_image(fig, f"charts/univariate/{name}_{timestamp}.svg")
+        except:
+            print(f'Chart {name} could not be saved.')
+            continue
+    
+    return list_fig
 
 
 
@@ -77,10 +95,10 @@ def create_comparative_charts(df, group_by_columns=['experience', 'job_location'
     # Initialize subplots layout
     n_cols = len(group_by_columns)
     fig = make_subplots(
-        rows=4, cols=n_cols, 
+        rows=3, cols=n_cols, 
         subplot_titles=[
             f"{chart} grouped by {group}" 
-            for chart in ["Job Count", "Salary Distribution", "Experience Distribution", "Skill Distribution"]
+            for chart in ["Job Count", "Salary Distribution", "Experience Distribution"]
             for group in group_by_columns
         ],
         horizontal_spacing=0.1,
@@ -116,15 +134,7 @@ def create_comparative_charts(df, group_by_columns=['experience', 'job_location'
         for trace in fig_experience.data:
             fig.add_trace(trace, row=3, col=col_idx)
 
-        # Skill distribution
-        skills = df['requirement'].dropna().str.split(',').explode().str.strip()
-        skill_counts = skills.value_counts().head(max_skills).reset_index()
-        skill_counts.columns = ['skill', 'count']
-        fig_skills = px.bar(skill_counts, x='skill', y='count', 
-                            color='skill', 
-                            labels={'skill': 'Skill', 'count': 'Count'})
-        for trace in fig_skills.data:
-            fig.add_trace(trace, row=4, col=col_idx)
+
 
     # Update layout
     fig.update_layout(
@@ -135,6 +145,16 @@ def create_comparative_charts(df, group_by_columns=['experience', 'job_location'
 
     fig.show()
 
+    timestamp = datetime.now().strftime("%y%m%d%H%m")
+    try:
+        os.mkdir('charts/multivariate/comparation')
+    except:
+        pass
+    try:
+        pio.write_image(fig, f"charts/multivariate/comparation_{timestamp}.png")
+    except:
+        print('Chart could not be saved.')
+        
 
 
 def create_grouped_charts(df, group_by, analysis_columns, max_skills=20):
@@ -210,7 +230,15 @@ def create_grouped_charts(df, group_by, analysis_columns, max_skills=20):
     )
     fig.show()
 
-
+    timestamp = datetime.now().strftime("%y%m%d%H%m")
+    try:
+        os.mkdir('charts/multivariate/grouped')
+    except:
+        pass
+    try:
+        pio.write_image(fig, f"charts/multivariate/grouped_{timestamp}.png")
+    except:
+        print('Chart could not be saved.')
 
 
 def create_grouped_charts_in_batches(df, group_by, analysis_columns, max_skills=20, max_rows=5):
@@ -307,8 +335,73 @@ def create_grouped_charts_in_batches(df, group_by, analysis_columns, max_skills=
         )
         fig.show()
 
-        # Save the figure to an HTML file
-        output_file = os.path.join('charts', f"{datetime.now().strftime('%y%m%d-%H%M')}_{group_by}_batch_{batch_idx + 1}.html")
-        fig.write_html(output_file)
-        print(f"Saved batch {batch_idx + 1} to {output_file}")
 
+        timestamp = datetime.now().strftime("%y%m%d%H%m")
+        try:
+            os.mkdir('charts/multivariate/groupedbatch')
+        except:
+            pass
+        try:
+            pio.write_image(fig, f"charts/multivariate/groupedbatch_{timestamp}.png")
+        except:
+            print('Chart could not be saved.')
+
+        # # Save the figure to an HTML file
+        # output_file = os.path.join('charts', f"{datetime.now().strftime('%y%m%d-%H%M')}_{group_by}_batch_{batch_idx + 1}.html")
+        # fig.write_html(output_file)
+        # print(f"Saved batch {batch_idx + 1} to {output_file}")
+
+def create_scatter_3d(df, x_col, y_col, z_col, color_col):
+    """
+    Create a 3D scatter plot to show the correlation between three numerical variables.
+
+    Args:
+    df (DataFrame): The input data.
+    x_col (str): Column name for the x-axis.
+    y_col (str): Column name for the y-axis.
+    z_col (str): Column name for the z-axis.
+    color_col (str): Column name for the color dimension (categorical or numerical).
+
+    Returns:
+    fig (Figure): A Plotly 3D scatter plot figure.
+    """
+    # Create a 3D scatter plot
+    fig = px.scatter_3d(
+        df,
+        x=x_col,
+        y=y_col,
+        z=z_col,
+        color=color_col,
+        title=f"3D Scatter Plot of {x_col}, {y_col}, {z_col} grouped by {color_col}",
+        labels={
+            x_col: x_col.replace('_', ' ').title(),
+            y_col: y_col.replace('_', ' ').title(),
+            z_col: z_col.replace('_', ' ').title(),
+            color_col: color_col.replace('_', ' ').title()
+        },
+        opacity=0.7
+    )
+
+    # Update layout
+    fig.update_layout(
+        height=800,
+        scene=dict(
+            xaxis_title=x_col.replace('_', ' ').title(),
+            yaxis_title=y_col.replace('_', ' ').title(),
+            zaxis_title=z_col.replace('_', ' ').title(),
+        ),
+        margin=dict(l=0, r=0, b=0, t=40),
+        legend=dict(title=color_col.replace('_', ' ').title()),
+    )
+
+    timestamp = datetime.now().strftime("%y%m%d%H%m")
+    try:
+        os.mkdir('charts/multivariate/scatter')
+    except:
+        pass
+    try:
+        pio.write_image(fig, f"charts/multivariate/scatter_{timestamp}.png")
+    except:
+        print('Chart could not be saved.')
+
+    return fig

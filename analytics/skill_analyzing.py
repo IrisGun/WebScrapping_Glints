@@ -79,6 +79,7 @@ if __name__ == "__main__":
     df = pd.DataFrame(data)
     
     # Preprocess skills and prepare transactions
+
     transactions = prepare_transactions(df, "requirement")
     
     # Generate association rules
