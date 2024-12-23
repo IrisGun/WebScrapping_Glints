@@ -1,5 +1,5 @@
 # WebScrapping_Glints
-This project intent to crawl information about Data Analyst jobs in Vietnam and conduct an EDA to gain a better understanding about the labour market in this field
+TL,DR: This project crawls info on Data Analyst jobs in Vietnam and does some EDA to understand the post-pandemic (2022) labor market for this role. 
 It was first inspired by the reposistory of anhvi.
 
 ---
