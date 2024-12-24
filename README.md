@@ -93,7 +93,8 @@ Job opportunities are most abundant for candidates with 1-3 years of experience,
 <img src="charts\capture\experiencerequirement.png" alt="chart_experience">  
 
 
-### **2. 
+### **2. Comparative charts**
+
 
 ---
 ## **Suggestions for Improvement**  
