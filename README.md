@@ -58,10 +58,22 @@ This project is my deep dive into the real-deal labor market demand, so I can tr
 
 ---
 
-## **Insights**
+## **Some takeaway insights**
+**1. Data job count by Category**  
+Based on the job count chart from Glints in Vietnam, Data Science exhibits the highest demand, followed by Software Engineering. Other fields like Engineering, Marketing, and Finance have significantly fewer job postings compared to these two leading areas, indicating a strong focus on tech-related positions on the platform.  Notably, employers tend to categorize various data-related roles under the broad umbrella of _"Data Science"_ rather than posting and selecting for specific business domains.
 
+<img src="charts\capture\jobcount_bycategory.png" alt="chart_job_bycategory" width="60%">
 
+**2. Data job count by Location**  
+Job opportunities are heavily concentrated in Ho Chi Minh City, which has a substantially larger volume of postings compared to Hanoi, while Ha Nam and Da Nang have minimal job postings represented in this data. This indicates a significant regional disparity in job availability. Therefore, candidates in major metropolitan areas can effectively utilize this platform, while those targeting more niche markets or seeking opportunities in other regions should consider alternative job search strategies.
 
+<img src="charts\capture\jobdistribution_location.png" alt="chart_job_bylocation" width="60%">  
+
+**3. Salary distribution**  
+Software Engineering and Data Science offer the most competitive salaries among the specific categories, with Data Science showing potential for higher earnings due to some outliers. Engineering roles have a more modest and consistent pay range, while Marketing, Administrative, Finance, and Business Development/Sales generally offer lower salaries with less variability.  
+The presence of high-end outliers in Data Science implies that achieving significant experience and expertise in this field can lead to substantial financial rewards, making it a promising career path for those seeking high earning potential.
+
+<img src="charts\capture\salarydistribution_bycategory.png" alt="chart_salarydistribution" width="60%">  
 
 ---
 ## **Suggestions for Improvement**  
