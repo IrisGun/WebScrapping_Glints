@@ -58,6 +58,12 @@ This project is my deep dive into the real-deal labor market demand, so I can tr
 
 ---
 
+## **Insights**
+
+
+
+
+---
 ## **Suggestions for Improvement**  
 
 This project provides a foundation for analyzing job market data from Glints. Due to my current limitations (mostly involving the space-time continuum and a distinct lack of superpowers), I haven't quite gotten around to these enhancements yet:
