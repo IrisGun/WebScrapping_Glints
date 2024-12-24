@@ -59,22 +59,41 @@ This project is my deep dive into the real-deal labor market demand, so I can tr
 ---
 
 ## **Some takeaway insights**
-**1. Data job count by Category**  
+### **1. Univariate charts**  
+**1.1. Data job count by Category**  
 Based on the job count chart from Glints in Vietnam, Data Science exhibits the highest demand, followed by Software Engineering. Other fields like Engineering, Marketing, and Finance have significantly fewer job postings compared to these two leading areas, indicating a strong focus on tech-related positions on the platform.  Notably, employers tend to categorize various data-related roles under the broad umbrella of _"Data Science"_ rather than posting and selecting for specific business domains.
 
-<img src="charts\capture\jobcount_bycategory.png" alt="chart_job_bycategory">
+<img src="charts\capture\jobcount_bycategory.png" alt="chart_job_bycategory">  
 
-**2. Data job count by Location**  
+
+**1.2. Data job count by Location**  
 Job opportunities are heavily concentrated in Ho Chi Minh City, which has a substantially larger volume of postings compared to Hanoi, while Ha Nam and Da Nang have minimal job postings represented in this data. This indicates a significant regional disparity in job availability. Therefore, candidates in major metropolitan areas can effectively utilize this platform, while those targeting more niche markets or seeking opportunities in other regions should consider alternative job search strategies.
 
 <!-- <img src="charts\capture\jobdistribution_location.png" alt="chart_job_bylocation" width="60%">   -->
 <img src="charts\capture\jobdistribution_location.png" alt="chart_job_bylocation">  
 
-**3. Salary distribution**  
+
+**1.3. Salary distribution**  
 Software Engineering and Data Science offer the most competitive salaries among the specific categories, with Data Science showing potential for higher earnings due to some outliers. Engineering roles have a more modest and consistent pay range, while Marketing, Administrative, Finance, and Business Development/Sales generally offer lower salaries with less variability.  
 The presence of high-end outliers in Data Science implies that achieving significant experience and expertise in this field can lead to substantial financial rewards, making it a promising career path for those seeking high earning potential.
 
 <img src="charts\capture\salarydistribution_bycategory.png" alt="chart_salarydistribution">  
+
+
+**1.4. Top required skills**  
+Among the top 5 required skills among data analysis, data science, programming, database, there is a requirement for English proficiency, demonstrating that in addition to technical skills, candidates need communication skills, especially communication in an international environment.  
+Python is still the star! Tableau and PowerBI are most popular tool for data visualization.  
+
+<img src="charts\capture\toprequiredskills.png" alt="chart_topskills">  
+
+
+**1.5. Experience requirement**  
+Job opportunities are most abundant for candidates with 1-3 years of experience, indicating a strong demand for early-career professionals. While entry-level and mid-level roles are available, senior-level positions are comparatively scarce. Senior-level candidates should probably explore other resources to find data-related jobs rather than this mass channel.  
+
+<img src="charts\capture\experiencerequirement.png" alt="chart_experience">  
+
+
+### **2. 
 
 ---
 ## **Suggestions for Improvement**  
