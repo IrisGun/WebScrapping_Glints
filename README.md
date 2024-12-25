@@ -103,14 +103,27 @@ Job opportunities are most abundant for candidates with 1-3 years of experience,
 - _Experience Requirements:_  
    Job postings in both cities show a strong preference for candidates with 1-3 years of experience.  
    Entry-level candidate are more well-accepted in Hanoi than Ho Chi Minh city.  
-- _Skill requiremtns:_  
+- _Skill requirments:_  
    Data Analysis, SQL, and Python are consistently among the most in-demand skills in both locations.
    The specific skill requirements might slightly between cities but the overall emphasis on tenchnical skills remain consistent.
    Besides Data Analysis, Data Science, and coding skills, Data jobs in Hanoi show the preference in BI tool while Ho Chi Minh city lean toward database a little bit.  
 
 - **_Overall:_** Ho Chi Minh city presents a more competitive job market with higher earning potential. At this specific timeline (Nov 2022). Data Analysis and Data Science as core skills, Python and SQL as technical skills should be sharpen. Focus on Database for candidates who want to target Ho Chi Minh city and BI tool for counterpart in Hanoi.   
 
-#### **2.2. Segment by experience**  
+#### **2.2. Segment by experience**   
+<img src="charts\capture\seg_experience.png" alt="chart_segexperience">  
+
+- _Salary:_   
+   As expected, salary increases with experience. The range of salaries also widens with experience, indicating greater variation in compensation for more senior roles.  
+   Junior to middle level position with 1-3 years of experience show some outliers with significantly out of the crowd salaries, indicates a period of strong momentum and increasing polarization.  
+- _Skills:_  
+   The most sought-after skills for entry-level to mid-level positions are technical skills. Meanwhile, senior counterparts show a preference for interpersonal skills and domain knowledge.
+- _Location:_  
+   Except entry level with less than 1 year of experience, more job postings are in Ho Chi Minh city than Hanoi.  
+- **_Overall:_**  
+   A fresher located in Hanoi may start their career in this city and then, after 1-2 years, move to Ho Chi Minh City for a more competitive yet rewarding job.  
+   The 1-3 year mark in this field is a crucial period for career and salary growth. This should be a key consideration when their prioritizing life aspects.  
+   To begin a career, technical skills are paramount, especially Data Analysis, Data Science, Python, and SQL. However, as one progresses to a senior level, interpersonal skills, management abilities, and domain knowledge become more highly valued.
 
 
 ---
