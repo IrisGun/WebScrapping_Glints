@@ -97,7 +97,8 @@ Python is still the star! Tableau and PowerBI are most popular tool for data vis
 
 **_Word cloud of job requirments could be seen here:_**  
 
-<img src="charts\wordcloud\requirement.png" alt="wordcloud_requirement">
+<img src="charts\wordcloud\requirement.png" alt="wordcloud_requirement">  
+
 #### **1.5. Experience requirement**  
 Job opportunities are most abundant for candidates with 1-3 years of experience, indicating a strong demand for early-career professionals. While entry-level and mid-level roles are available, senior-level positions are comparatively scarce. Senior-level candidates should probably explore other resources to find data-related jobs rather than this mass channel.  
 
