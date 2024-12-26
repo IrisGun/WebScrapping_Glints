@@ -37,8 +37,16 @@ This project is my deep dive into the real-deal labor market demand, so I can tr
 3. Install dependencies:
    ```bash
    pip install -r requirements.txt
-4. Run the notebook   
-
+4. Run the notebook
+    <pre>
+    crawling/
+    ├── crawler.py       # Data crawling engine
+    utils/
+    ├── data_processing.py # Data processing functions
+    analytics/
+    ├── apriori.py       # Advanced data analysis (e.g., apriori)
+    eda.ipynb             # Load and EDA data
+    </pre>
 ---
 
 ## **Technologies Used**

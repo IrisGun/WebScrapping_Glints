@@ -10,7 +10,7 @@ def preprocess_skills(requirements):
     """
     return [re.sub(r"[^\w\s]", "", skill.strip()).lower() for skill in requirements.split(",") if skill.strip()]
 
-# Step 1: Process skills into a transactional format
+# Process skills into a transactional format
 def prepare_transactions(df, column):
     """
     Convert the skills in the 'requirement' column to transactional data for association rules.
@@ -19,7 +19,7 @@ def prepare_transactions(df, column):
     transactions = df['skills_list'].tolist()
     return transactions
 
-# Step 2: Generate association rules using Apriori
+# Generate association rules using Apriori
 def generate_association_rules(transactions, min_support=0.01, min_confidence=0.5):
     """
     Generate association rules from transactional data using the Apriori algorithm.
@@ -35,7 +35,7 @@ def generate_association_rules(transactions, min_support=0.01, min_confidence=0.
     rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=min_confidence)
     return rules
 
-# Step 3: Train Word2Vec for skill embeddings
+# Train Word2Vec for skill embeddings
 def train_word2vec(transactions):
     """
     Train a Word2Vec model on the list of skill transactions.
@@ -43,7 +43,7 @@ def train_word2vec(transactions):
     model = Word2Vec(sentences=transactions, vector_size=50, window=5, min_count=1, workers=4)
     return model
 
-# Step 4: Recommend related skills
+# Recommend related skills
 def recommend_skills(rules, word2vec_model, input_skills):
     """
     Recommend skills based on association rules and Word2Vec similarity.
@@ -64,33 +64,33 @@ def recommend_skills(rules, word2vec_model, input_skills):
     # Combine and return unique recommendations
     return list(associated_skills.union(similar_skills) - set(input_skills))
 
-# Example Workflow
-if __name__ == "__main__":
-    # Load sample data
-    data = {
-        "requirement": [
-            "Interpersonal Skills, English, Analyzing skills, Backend Developer",
-            "English, Strong Leadership Skills, Product Development",
-            "Backend Developer, Data Structures, Critical Thinking",
-            "Nosql, Data Modeling, Cloud Infrastructure, nodejs",
-            "English, Financial Literacy, Stakeholder Management"
-        ]
-    }
-    df = pd.DataFrame(data)
+# # Example Workflow
+# if __name__ == "__main__":
+#     # Load sample data
+#     data = {
+#         "requirement": [
+#             "Interpersonal Skills, English, Analyzing skills, Backend Developer",
+#             "English, Strong Leadership Skills, Product Development",
+#             "Backend Developer, Data Structures, Critical Thinking",
+#             "Nosql, Data Modeling, Cloud Infrastructure, nodejs",
+#             "English, Financial Literacy, Stakeholder Management"
+#         ]
+#     }
+#     df = pd.DataFrame(data)
     
-    # Preprocess skills and prepare transactions
+#     # Preprocess skills and prepare transactions
 
-    transactions = prepare_transactions(df, "requirement")
+#     transactions = prepare_transactions(df, "requirement")
     
-    # Generate association rules
-    rules = generate_association_rules(transactions, min_support=0.2, min_confidence=0.6)
+#     # Generate association rules
+#     rules = generate_association_rules(transactions, min_support=0.2, min_confidence=0.6)
     
-    # Train Word2Vec model
-    word2vec_model = train_word2vec(transactions)
+#     # Train Word2Vec model
+#     word2vec_model = train_word2vec(transactions)
     
-    # Input skills
-    input_skills = ["english", "backend developer"]
+#     # Input skills
+#     input_skills = ["english", "backend developer"]
     
-    # Recommend additional skills
-    recommendations = recommend_skills(rules, word2vec_model, input_skills)
-    print("Recommended skills:", recommendations)
+#     # Recommend additional skills
+#     recommendations = recommend_skills(rules, word2vec_model, input_skills)
+#     print("Recommended skills:", recommendations)

@@ -1,7 +1,9 @@
+from matplotlib import pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.io as pio
+from wordcloud import WordCloud
 import math
 from datetime import datetime
 import os
@@ -69,12 +71,12 @@ def create_charts(df):
     list_fig = [fig_job_counts,fig_salary_distribution, fig_experience_counts, fig_location_counts, fig_skill_counts]
     list_fig_name = ['job_counts', 'salary_distribution', 'experience_counts', 'location_counts', 'skill_counts']
     
-    for fig, name in zip(list_fig, list_fig_name):
-        try:
-            pio.write_image(fig, f"charts/univariate/{name}_{timestamp}.svg")
-        except:
-            print(f'Chart {name} could not be saved.')
-            continue
+    # for fig, name in zip(list_fig, list_fig_name):
+    #     try:
+    #         pio.write_image(fig, f"charts/univariate/{name}_{timestamp}.svg")
+    #     except:
+    #         print(f'Chart {name} could not be saved.')
+    #         continue
     
     return list_fig
 
@@ -145,15 +147,15 @@ def create_comparative_charts(df, group_by_columns=['experience', 'job_location'
 
     fig.show()
 
-    timestamp = datetime.now().strftime("%y%m%d%H%m")
-    try:
-        os.mkdir('charts/multivariate/comparation')
-    except:
-        pass
-    try:
-        pio.write_image(fig, f"charts/multivariate/comparation_{timestamp}.png")
-    except:
-        print('Chart could not be saved.')
+    # timestamp = datetime.now().strftime("%y%m%d%H%m")
+    # try:
+    #     os.mkdir('charts/multivariate/comparation')
+    # except:
+    #     pass
+    # try:
+    #     pio.write_image(fig, f"charts/multivariate/comparation_{timestamp}.png")
+    # except:
+    #     print('Chart could not be saved.')
         
 
 
@@ -230,15 +232,15 @@ def create_grouped_charts(df, group_by, analysis_columns, max_skills=20):
     )
     fig.show()
 
-    timestamp = datetime.now().strftime("%y%m%d%H%m")
-    try:
-        os.mkdir('charts/multivariate/grouped')
-    except:
-        pass
-    try:
-        pio.write_image(fig, f"charts/multivariate/grouped_{timestamp}.png")
-    except:
-        print('Chart could not be saved.')
+    # timestamp = datetime.now().strftime("%y%m%d%H%m")
+    # try:
+    #     os.mkdir('charts/multivariate/grouped')
+    # except:
+    #     pass
+    # try:
+    #     pio.write_image(fig, f"charts/multivariate/grouped_{timestamp}.png")
+    # except:
+    #     print('Chart could not be saved.')
 
 
 def create_grouped_charts_in_batches(df, group_by, analysis_columns, max_skills=20, max_rows=5):
@@ -336,15 +338,15 @@ def create_grouped_charts_in_batches(df, group_by, analysis_columns, max_skills=
         fig.show()
 
 
-        timestamp = datetime.now().strftime("%y%m%d%H%m")
-        try:
-            os.mkdir('charts/multivariate/groupedbatch')
-        except:
-            pass
-        try:
-            pio.write_image(fig, f"charts/multivariate/groupedbatch_{timestamp}.png")
-        except:
-            print('Chart could not be saved.')
+        # timestamp = datetime.now().strftime("%y%m%d%H%m")
+        # try:
+        #     os.mkdir('charts/multivariate/groupedbatch')
+        # except:
+        #     pass
+        # try:
+        #     pio.write_image(fig, f"charts/multivariate/groupedbatch_{timestamp}.png")
+        # except:
+        #     print('Chart could not be saved.')
 
         # # Save the figure to an HTML file
         # output_file = os.path.join('charts', f"{datetime.now().strftime('%y%m%d-%H%M')}_{group_by}_batch_{batch_idx + 1}.html")
@@ -394,14 +396,40 @@ def create_scatter_3d(df, x_col, y_col, z_col, color_col):
         legend=dict(title=color_col.replace('_', ' ').title()),
     )
 
-    timestamp = datetime.now().strftime("%y%m%d%H%m")
-    try:
-        os.mkdir('charts/multivariate/scatter')
-    except:
-        pass
-    try:
-        pio.write_image(fig, f"charts/multivariate/scatter_{timestamp}.png")
-    except:
-        print('Chart could not be saved.')
+    # timestamp = datetime.now().strftime("%y%m%d%H%m")
+    # try:
+    #     os.mkdir('charts/multivariate/scatter')
+    # except:
+    #     pass
+    # try:
+    #     pio.write_image(fig, f"charts/multivariate/scatter_{timestamp}.png")
+    # except:
+    #     print('Chart could not be saved.')
 
     return fig
+
+
+def generate_wordcloud(df, column, title):
+    """
+    Generate a word cloud for any given column of a DataFrame.
+
+    Parameters:
+    df (DataFrame): The input DataFrame.
+    column (str): The column name to generate the word cloud from.
+    title (str): The title of the word cloud plot.
+
+    Returns:
+    None: Displays the word cloud plot.
+    """
+    text_data = ','.join(x for x in df[column].dropna())
+
+    plt.subplots(figsize=(15, 15))
+    wc = WordCloud(width=1600, height=900,
+                   background_color='white',
+                   min_font_size=10,
+                   random_state=1)
+    wc.generate(text_data)
+    plt.imshow(wc)
+    plt.axis("off")
+    plt.title(title)
+    plt.show()
